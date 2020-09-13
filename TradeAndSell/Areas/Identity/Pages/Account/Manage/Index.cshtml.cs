@@ -23,6 +23,7 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        [Display(Name = "Email")]
         public string Username { get; set; }
 
         [TempData]
@@ -33,6 +34,15 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Display(Name = "Display Name")]
+            public string DisplayName { get; set; }
+
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -42,11 +52,17 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var displayName = user.DisplayName;
+            var firstName = user.FirstName;
+            var lastName = user.LastName;
 
             Username = userName;
 
             Input = new InputModel
             {
+                DisplayName = displayName,
+                FirstName = firstName,
+                LastName = lastName,
                 PhoneNumber = phoneNumber
             };
         }
@@ -84,6 +100,42 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
                 if (!setPhoneResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set phone number.";
+                    return RedirectToPage();
+                }
+            }
+
+            var displayName = user.DisplayName;
+            if (Input.DisplayName != displayName)
+            {
+                user.DisplayName = Input.DisplayName;
+                var setDisplayName = await _userManager.UpdateAsync(user);
+                if (!setDisplayName.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set display name.";
+                    return RedirectToPage();
+                }
+            }
+
+            var firstName = user.FirstName;
+            if (Input.FirstName != firstName)
+            {
+                user.FirstName = Input.FirstName;
+                var setFirstName = await _userManager.UpdateAsync(user);
+                if (!setFirstName.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set first name.";
+                    return RedirectToPage();
+                }
+            }
+
+            var lastName = user.LastName;
+            if (Input.LastName != lastName)
+            {
+                user.LastName = Input.LastName;
+                var setLastName = await _userManager.UpdateAsync(user);
+                if (!setLastName.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set last name.";
                     return RedirectToPage();
                 }
             }
