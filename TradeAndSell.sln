@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeAndSell", "TradeAndSell\TradeAndSell.csproj", "{349C0B9D-5D4E-40B7-9754-53EC0289708D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{349C0B9D-5D4E-40B7-9754-53EC0289708D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349C0B9D-5D4E-40B7-9754-53EC0289708D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349C0B9D-5D4E-40B7-9754-53EC0289708D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349C0B9D-5D4E-40B7-9754-53EC0289708D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {059C914F-8F69-4591-8E43-82F9E8FB38E0}
+	EndGlobalSection
+EndGlobal
