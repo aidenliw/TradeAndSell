@@ -1,4 +1,4 @@
-# TradeAndSell
+# Trade And Sell App
 
 This is my software capstone project that I am currently working on for my last semester of my program.
 
