@@ -8,6 +8,9 @@ namespace TradeAndSell.Models
 {
     public class Item
     {
+        [Key]
+        public int Id { get; set; }
+
         [Display(Name = "Seller ID")]
         public string SellerId { get; set; }
 

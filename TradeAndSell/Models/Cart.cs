@@ -8,6 +8,7 @@ namespace TradeAndSell.Models
 {
     public class Cart
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "Item ID")]

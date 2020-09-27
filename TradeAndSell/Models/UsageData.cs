@@ -8,6 +8,7 @@ namespace TradeAndSell.Models
 {
     public class UsageData
     {
+        [Key]
         public int Id { get; set; }
          
         [Display(Name = "Post Count")]

@@ -8,6 +8,7 @@ namespace TradeAndSell.Models
 {
     public class Report
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "Sender ID")]
