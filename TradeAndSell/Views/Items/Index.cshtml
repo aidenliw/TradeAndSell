@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TradeAndSell.Models.Item>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+
+@foreach (var item in Model) {
+    <div class="card mb-3" style="max-width: 1400px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <a asp-action="Details" asp-route-id="@item.Id">
+                    @if (item.ImagePath != null)
+                    {
+                        <img src="~/images/@item.ImagePath" class="card-img" alt="Item Image">
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image">
+                    }
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                    </a>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Condition)</p>
+                    <p class="card-text">Price: CA$ @Html.DisplayFor(modelItem => item.Price)</p>
+                    @if (item.AllowTrade == "true")
+                    {
+                        <p class="card-text">Trade Range: CA$ @Html.DisplayFor(modelItem => item.MinTradePirce) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice)</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Trade Not Allowed</p>
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

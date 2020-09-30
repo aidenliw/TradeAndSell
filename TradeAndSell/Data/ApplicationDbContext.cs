@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TradeAndSell.Models;
 
 namespace TradeAndSell.Data
 {
@@ -12,5 +13,6 @@ namespace TradeAndSell.Data
             : base(options)
         {
         }
+        public DbSet<TradeAndSell.Models.Item> Item { get; set; }
     }
 }

@@ -52,6 +52,7 @@ namespace TradeAndSell.Controllers
                 DisplayName = "Member One",
                 FirstName = "Member",
                 LastName = "One",
+                EmailConfirmed = true
             });
 
             foreach (ApplicationUser member in MemberList)
@@ -77,7 +78,8 @@ namespace TradeAndSell.Controllers
                 UserName = "admin@email.com",
                 DisplayName = "Admin One",
                 FirstName = "Admin",
-                LastName = "One"
+                LastName = "One",
+                EmailConfirmed = true
             });
 
             foreach (ApplicationUser admin in AdminsList)

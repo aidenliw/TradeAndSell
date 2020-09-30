@@ -1,0 +1,135 @@
+﻿@model TradeAndSell.Models.ItemManagement
+
+@{
+    ViewData["Title"] = "Edit Item";
+}
+
+<h1 class="text-center">Edit Item</h1>
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form enctype="multipart/form-data" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="SellerId" />
+            @*<div class="form-group d-none">
+            <label asp-for="SellerId" class="control-label"></label>
+            <input asp-for="SellerId" class="form-control" />
+            <span asp-validation-for="SellerId" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Condition" class="control-label"></label>
+                <input asp-for="Condition" class="form-control" />
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Category" class="control-label"></label>
+                    <select asp-for="Category" class="form-control">
+                        <option value="">Please select one</option>
+                        <option value="Book">Book</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="City" class="control-label"></label>
+                    <select asp-for="City" class="form-control">
+                        <option value="">Please select one</option>
+                        <option value="Toronto">Toronto</option>
+                        <option value="Mississauga">Mississauga</option>
+                        <option value="Hamilton">Hamilton</option>
+                        <option value="Burlington">Burlington</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" placeholder="$" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllowTrade" class="control-label"></label>
+                <select asp-for="AllowTrade" class="form-control" id="selectAllowTrade">
+                    <option value="">Please select one</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="AllowTrade" class="text-danger"></span>
+            </div>
+            <div class="form-group allow-trade-div d-none">
+                <label asp-for="MinTradePirce" class="control-label"></label>
+                <input asp-for="MinTradePirce" class="form-control" />
+                <span asp-validation-for="MinTradePirce" class="text-danger"></span>
+            </div>
+            <div class="form-group allow-trade-div d-none">
+                <label asp-for="MaxTradePrice" class="control-label"></label>
+                <input asp-for="MaxTradePrice" class="form-control" />
+                <span asp-validation-for="MaxTradePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="Image" class="form-control custom-file-input" accept="image/*" />
+                    <label class="custom-file-label">Choose Image...</label>
+                </div>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+            if ($("#selectAllowTrade").val() == "true") {
+                $(".allow-trade-div").removeClass("d-none");
+            }
+            else {
+                $(".allow-trade-div").addClass("d-none");
+            }
+        });
+        $("#selectAllowTrade").change(function () {
+            if ($(this).val() == "true") {
+                $(".allow-trade-div").removeClass("d-none");
+            }
+            else {
+                $(".allow-trade-div").addClass("d-none");
+            }
+        });
+    </script>
+}

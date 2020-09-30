@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TradeAndSell.Models
 {
-    public class Item
+    public class ItemManagement
     {
         [Key]
         public int Id { get; set; }
@@ -34,8 +35,8 @@ namespace TradeAndSell.Models
         [Display(Name = "City")]
         public string City { get; set; }
 
-        [Display(Name = "Image Path")]
-        public string ImagePath { get; set; }
+        [Display(Name = "Image")]
+        public IFormFile Image { get; set; }
 
         [Required]
         [Display(Name = "Price")]
