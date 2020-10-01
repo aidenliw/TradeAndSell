@@ -9,82 +9,67 @@
 <div>
     <h4>Item</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SellerId)
+    <div class="row justify-content-center">
+        <div class="">
+            <div class="row">
+                <div class="col-5">
+                    @if (Model.ImagePath != null)
+                    {
+                        <img src="~/images/@Model.ImagePath" class="card-img" alt="Item Image">
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image">
+                    }
+                </div>
+                <div class="col-7">
+                    <h2>
+                        @Html.DisplayFor(model => model.Title)
+                    </h2>
+                    <br />
+                    <h4>
+                        @Html.DisplayFor(model => model.Condition)
+                    </h4>
+                    <br />
+                    <h4>Quantity Left: @Html.DisplayFor(model => model.Quantity)</h4>
+                    <h4>
+                        Buy Out Price: CA$ @Html.DisplayFor(model => model.Price)
+                    </h4>
+                    @if (Model.AllowTrade == "true")
+                    {
+                        <h4>Trade Range: CA$ @Html.DisplayFor(model => model.MinTradePirce) ~ CA$ @Html.DisplayFor(model => model.MaxTradePrice)</h4>
+                    }
+                    else
+                    {
+                        <p class="card-text">Trade Not Allowed</p>
+                    }
+                    <br />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="button" class="btn btn-primary" value="Buy" />
+                    <input type="button" class="btn btn-success" value="Trade" />
+                    <input type="button" class="btn btn-outline-primary" value="Add to Cart" />
+                    <input type="button" class="btn btn-outline-success" value="Add to Wish List" />
+                </div>
+                <div class="col-12">
+                    <h5>Description:</h5>
+                    <p>@Html.DisplayFor(model => model.Description)</p>
+                    <h5>Seller Location:</h5>
+                    <p>@Html.DisplayFor(model => model.City)</p>
+                </div>
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        @*
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SellerId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Condition)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Condition)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AllowTrade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AllowTrade)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MinTradePirce)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MinTradePirce)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxTradePrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxTradePrice)
-        </dd>
-    </dl>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>*@
+    </div>
 </div>
-<div>
+@*<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+</div>*@

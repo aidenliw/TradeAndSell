@@ -1,14 +1,61 @@
 ﻿@model IEnumerable<TradeAndSell.Models.Item>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Items";
 }
 
-<h1>Index</h1>
+<h1>All Items</h1>
 
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
+<div class="row mb-3">
+    <div class="col-3 dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categary: @(ViewData["CatergaryFilter"] != null ? @ViewData["CatergaryFilter"] : "All")
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+            <a asp-action="Index" asp-route-catergaryFilter="All" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">All</a>
+            <a asp-action="Index" asp-route-catergaryFilter="Books" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Books</a>
+            <a asp-action="Index" asp-route-catergaryFilter="Furniture" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Furniture</a>
+            <a asp-action="Index" asp-route-catergaryFilter="Electronics" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Electronics</a>
+        </div>
+    </div>
+    <div class="col-3 dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            City: @(ViewData["CityFilter"] != null ? @ViewData["CityFilter"] : "All")
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="All" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">All</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="Toronto" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Toronto</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="Mississauga" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Mississauga</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="Hamilton" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Hamilton</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="Burlington" asp-route-sortBy="@ViewData["SortBy"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Burlington</a>
+        </div>
+    </div>
+    <div class="col-3 dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort By @(ViewData["SortBy"] != null ? @ViewData["SortBy"] : "Default")
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="Default" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Default</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="Price: Low to High" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Price: Low to High</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="Price: High to Low" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Price: High to Low</a>
+            <a asp-action="Index" asp-route-catergaryFilter="@ViewData["CatergaryFilter"]" asp-route-cityFilter="@ViewData["CityFilter"]" asp-route-sortBy="Newest Arrivals" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="dropdown-item">Newest Arrivals</a>
+        </div>
+    </div>
+    <div class="col-3">
+        <form asp-action="Index">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" value="@ViewData["CurrentFilter"]" placeholder="" aria-label="Search Item">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-primary" id="searchUserButton" >Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
 
 @foreach (var item in Model) {
     <div class="card mb-3" style="max-width: 1400px;">
@@ -40,6 +87,7 @@
                     {
                         <p class="card-text">Trade Not Allowed</p>
                     }
+                <p>At @Html.DisplayFor(modelItem => item.City)</p>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

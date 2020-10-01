@@ -29,9 +29,86 @@ namespace TradeAndSell.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, string currentFilter, string catergaryFilter, string cityFilter, string sortBy)
         {
-            return View(await _context.Item.ToListAsync());
+            ViewData["CatergaryFilter"] = catergaryFilter;
+            ViewData["CityFilter"] = cityFilter;
+            ViewData["SortBy"] = sortBy;
+
+            if (search == null) { search = currentFilter; }
+            ViewData["CurrentFilter"] = search;
+
+            IQueryable<Item> items = _context.Item.AsQueryable();
+            // Search item by the input
+            if (!string.IsNullOrEmpty(search))
+            {
+                items = items.Where(p => p.Title.ToLower().Contains(search.ToLower())
+                || p.Condition.ToLower().Contains(search.ToLower())
+                || p.Description.ToLower().Contains(search.ToLower())
+                || p.Category.ToLower().Contains(search.ToLower())
+                || p.City.ToLower().Contains(search.ToLower()));
+            }
+
+
+            // Filter the item by categary
+            switch (catergaryFilter)
+            {
+                case "All":
+                    break;
+                case "Books":
+                    items = items.Where(i => i.Category == "Book");
+                    break;
+                case "Furniture":
+                    items = items.Where(i => i.Category == "Furniture");
+                    break;
+                case "Electronics":
+                    items = items.Where(i => i.Category == "Electronic");
+                    break;
+                default:
+                    break;
+            }
+
+            // Filter the item by city
+            switch (cityFilter)
+            {
+                case "All":
+                    break;
+                case "Toronto":
+                    items = items.Where(i => i.City == "Toronto");
+                    break;
+                case "Mississauga":
+                    items = items.Where(i => i.City == "Mississauga");
+                    break;
+                case "Hamilton":
+                    items = items.Where(i => i.City == "Hamilton");
+                    break;
+                case "Burlington":
+                    items = items.Where(i => i.City == "Burlington");
+                    break;
+                default:
+                    break;
+            }
+
+            // Sort the item
+            switch (sortBy)
+            {
+                case "Default":
+                    items = items.OrderBy(i => i.CreatedDate);
+                    break;
+                case "Price: Low to High":
+                    items = items.OrderBy(i => i.Price);
+                    break;
+                case "Price: High to Low":
+                    items = items.OrderByDescending(i => i.Price);
+                    break;
+                case "Newest Arrivals":
+                    items = items.OrderByDescending(i => i.CreatedDate);
+                    break;
+                default:
+                    items = items.OrderBy(i => i.CreatedDate);
+                    break;
+            }
+            return View(await items.ToListAsync());
         }
 
         // GET: Items/Details/5
@@ -64,7 +141,7 @@ namespace TradeAndSell.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice")] ItemManagement item)
+        public async Task<IActionResult> Create([Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice,CreatedDate")] ItemManagement item)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +171,8 @@ namespace TradeAndSell.Controllers
                     Quantity = item.Quantity,
                     AllowTrade = item.AllowTrade,
                     MinTradePirce = item.MinTradePirce,
-                    MaxTradePrice = item.MaxTradePrice
+                    MaxTradePrice = item.MaxTradePrice,
+                    CreatedDate = DateTime.Now
                 };
 
                 _context.Add(newItem);
@@ -132,7 +210,8 @@ namespace TradeAndSell.Controllers
                 Quantity = item.Quantity,
                 AllowTrade = item.AllowTrade,
                 MinTradePirce = item.MinTradePirce,
-                MaxTradePrice = item.MaxTradePrice
+                MaxTradePrice = item.MaxTradePrice,
+                CreatedDate = item.CreatedDate
             };
             return View(newitem);
         }
@@ -142,7 +221,7 @@ namespace TradeAndSell.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice")] ItemManagement item)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice,CreatedDate")] ItemManagement item)
         {
             if (id != item.Id)
             {
@@ -176,7 +255,8 @@ namespace TradeAndSell.Controllers
                         Quantity = item.Quantity,
                         AllowTrade = item.AllowTrade,
                         MinTradePirce = item.MinTradePirce,
-                        MaxTradePrice = item.MaxTradePrice
+                        MaxTradePrice = item.MaxTradePrice,
+                        CreatedDate = item.CreatedDate
                     };
 
                     _context.Update(newItem);

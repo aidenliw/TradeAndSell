@@ -54,5 +54,7 @@ namespace TradeAndSell.Models
 
         [Display(Name = "Maximum Trade Price")]
         public float? MaxTradePrice { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }
