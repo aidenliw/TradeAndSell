@@ -12,7 +12,7 @@ namespace TradeAndSell.Models
         public int Id { get; set; }
 
         [Display(Name = "Item ID")]
-        public List<int> ItemId { get; set; }
+        public int ItemId { get; set; }
 
         [Display(Name = "Owner ID")]
         public string OwnerId { get; set; }
