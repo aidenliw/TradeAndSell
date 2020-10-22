@@ -47,8 +47,11 @@
                     <input type="hidden" asp-for="Id" />
                     <input type="button" class="btn btn-primary" value="Buy" />
                     <input type="button" class="btn btn-success" value="Trade" />
-                    <input type="button" class="btn btn-outline-primary" value="Add to Cart" />
-                    <input type="button" class="btn btn-outline-success" value="Add to Wish List" />
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Member") || User.IsInRole("Admin")))
+                    {
+                    <a class="btn btn-outline-primary" asp-action="AddToCart" asp-route-id="@Model.Id">Add to Cart</a>
+                    <a class="btn btn-outline-success" asp-action="AddToWishList" asp-route-id="@Model.Id">Add to Wish List</a>
+                    }
                 </div>
                 <div class="col-12">
                     <h5>Description:</h5>

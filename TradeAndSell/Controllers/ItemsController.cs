@@ -111,6 +111,53 @@ namespace TradeAndSell.Controllers
             return View(await items.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin, Member")]
+        public IActionResult AddToCart(int id) 
+        {
+            // Get user id
+            var userId = _userManager.GetUserId(User);
+
+            // Get item details
+            IQueryable<Item> items = _context.Item.AsQueryable();
+            Item selectedItem = items.Where(i => i.Id == id).FirstOrDefault();
+
+            // Add the item to the cart of current logged in user
+            Cart newItem = new Cart()
+            {
+                ItemId = selectedItem.Id,
+                OwnerId = userId,
+                OnWishList = false
+            };
+            _context.Add(newItem);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Carts");
+        }
+
+        [Authorize(Roles = "Admin, Member")]
+        public IActionResult AddToWishList(int id)
+        {
+            // Get user info
+            var userId = _userManager.GetUserId(User);
+
+            // Get item details
+            IQueryable<Item> items = _context.Item.AsQueryable();
+            Item selectedItem = items.Where(i => i.Id == id).FirstOrDefault();
+
+            // Add the item to the cart of current logged in user
+            Cart newItem = new Cart()
+            {
+                ItemId = selectedItem.Id,
+                OwnerId = userId,
+                OnWishList = true
+            };
+            _context.Add(newItem);
+            _context.SaveChanges();
+
+            //return RedirectToAction("WishList", "Carts");
+            return RedirectToPage("/Account/Manage/MyWishList", new { area = "Identity" });
+        }
+
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
         {

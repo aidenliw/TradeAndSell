@@ -1,12 +1,22 @@
-﻿@page
-@model MyWishListModel
+﻿@model IEnumerable<TradeAndSell.Models.Item>
+
 @{
-    ViewData["Title"] = "My Wish List";
-    ViewData["ActivePage"] = ManageNavPages.MyWishList;
+    ViewData["Title"] = "Shopping Cart";
 }
 
-<h4>@ViewData["Title"]</h4>
-@foreach (var item in Model.ItemsInWishList)
+<div class="row">
+    <div class="col-4">
+        <h1>Shopping Cart</h1>
+    </div>
+    <div class="col-8">
+        <div class="float-right">
+            <a style="font-size:24px; vertical-align:middle;" href="/Identity/Account/Manage/MyWishList">My Wish List</a>
+            <input class="btn btn-primary btn-lg" value="Checkout All" />
+        </div>
+    </div>
+</div>
+
+@foreach (var item in Model)
 {
     <div class="card mb-3" style="max-width: 1400px;">
         <div class="row no-gutters">
@@ -38,16 +48,16 @@
                         <p class="card-text">Trade Not Allowed</p>
                     }
                     <p>At @Html.DisplayFor(modelItem => item.City)</p>
-
-                    <a class="btn btn-outline-info" asp-controller="Carts" asp-action="MoveToCart" asp-route-id="@item.Id">Move to cart</a>
-                    <a class="btn btn-outline-success" asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a class="btn btn-outline-danger" asp-controller="Carts" asp-action="DeleteFromWishList" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-outline-info" asp-controller="Carts" asp-action="MoveToWishList" asp-route-id="@item.Id">Move to wish list</a>
+                    <a class="btn btn-outline-danger" asp-controller="Carts" asp-action="DeleteFromCart" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-outline-primary">Buy</a>
+                    <a class="btn btn-outline-success">Trade</a>
                 </div>
             </div>
         </div>
     </div>
 }
-@if (Model.ItemsInWishList.Count == 0)
+@if (Model.Count() == 0)
 {
-    <p>No Items to display.</p>
+    <h3 style="font-weight:normal">Your Shopping Cart is Empty.</h3>
 }
