@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using Stripe.Checkout;
 using TradeAndSell.Data;
 using TradeAndSell.Models;
 
@@ -26,6 +28,7 @@ namespace TradeAndSell.Controllers
             _userManager = userManager;
             _context = context;
             this.hostingEnvironment = hostingEnvironment;
+            StripeConfiguration.ApiKey = "sk_test_YXExkbOl2bE14RGjl6k96vIV002kRScUnG";
         }
 
         // GET: Items
@@ -111,6 +114,68 @@ namespace TradeAndSell.Controllers
             return View(await items.ToListAsync());
         }
 
+        [HttpPost("create-checkout-session")]
+        public ActionResult CreateCheckoutSession()
+        {
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string>
+                {
+                    "card",
+                },
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = 100,
+                        Currency = "cad",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "Payment Demo",
+                        },
+
+                    },
+                    Quantity = 1,
+                    //Images = { hostingEnvironment.WebRootFileProvider.GetFileInfo("images/no-image-avaiable.jpg")?.PhysicalPath },
+                    Description = "This payment function is deprecated, this is just a example show case"
+                    },
+                },
+                Mode = "payment",
+                SuccessUrl = "https://example.com/success",
+                CancelUrl = "https://example.com/cancel",
+            };
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            return Json(new { id = session.Id });
+        }
+
+        [Authorize(Roles = "Admin, Member")]
+        public IActionResult AddToTrade(int id)
+        {
+            // Get user id
+            var userId = _userManager.GetUserId(User);
+
+            // Get item details
+            IQueryable<Item> items = _context.Item.AsQueryable();
+            Item selectedItem = items.Where(i => i.Id == id).FirstOrDefault();
+
+            //// Add the item to the cart of current logged in user
+            //Cart newItem = new Cart()
+            //{
+            //    ItemId = selectedItem.Id,
+            //    OwnerId = userId,
+            //    OnWishList = false
+            //};
+            //_context.Add(newItem);
+            //_context.SaveChanges();
+
+            return RedirectToAction("Index", "Carts");
+        }
+
         [Authorize(Roles = "Admin, Member")]
         public IActionResult AddToCart(int id) 
         {
@@ -172,7 +237,6 @@ namespace TradeAndSell.Controllers
             {
                 return NotFound();
             }
-
             return View(item);
         }
 
