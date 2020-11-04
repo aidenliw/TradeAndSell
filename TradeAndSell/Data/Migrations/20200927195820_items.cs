@@ -22,7 +22,7 @@ namespace TradeAndSell.Data.Migrations
                     Price = table.Column<float>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     AllowTrade = table.Column<string>(nullable: true),
-                    MinTradePirce = table.Column<float>(nullable: false),
+                    MinTradePrice = table.Column<float>(nullable: false),
                     MaxTradePrice = table.Column<float>(nullable: false)
                 },
                 constraints: table =>

@@ -16,7 +16,7 @@ namespace TradeAndSell.Data.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<float>(
-                name: "MinTradePirce",
+                name: "MinTradePrice",
                 table: "Item",
                 nullable: true,
                 oldClrType: typeof(float),
@@ -90,7 +90,7 @@ namespace TradeAndSell.Data.Migrations
                 oldClrType: typeof(string));
 
             migrationBuilder.AlterColumn<float>(
-                name: "MinTradePirce",
+                name: "MinTradePrice",
                 table: "Item",
                 type: "real",
                 nullable: false,

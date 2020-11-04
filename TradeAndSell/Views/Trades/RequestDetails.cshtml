@@ -1,0 +1,67 @@
+﻿@using TradeAndSell.Models
+@model Trade
+
+@{
+    ViewData["Title"] = "Trade Request Details";
+    IEnumerable<Item> TradeItems = ViewData["TradeItems"] as IEnumerable<Item>;
+    Item TargetItem = ViewData["TargetItem"] as Item;
+    TradeDetails TradeDetails = ViewData["TradeDetails"] as TradeDetails;
+    var MinTradePrice = ViewData["MinTradePrice"];
+    var MaxTradePrice = ViewData["MaxTradePrice"];
+}
+
+<h1>Trade Request Details</h1>
+<hr />
+<div>
+    <div class="row justify-content-center">
+        <div class="">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Requested Item</h2>
+                </div>
+                <div class="col-5">
+                    <a asp-controller="Items" asp-action="Details" asp-route-id="@TargetItem.Id">
+                        @if (TargetItem.ImagePath != null)
+                        {
+                            <img src="~/images/@TargetItem.ImagePath" class="card-img" alt="Item Image">
+                        }
+                        else
+                        {
+                            <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image">
+                        }
+                    </a>
+                </div>
+                <div class="col-7">
+                    <h4>@Html.DisplayFor(model => TargetItem.Title)</h4>
+                    <h4>Trade Range: CA$ @Html.DisplayFor(model => TargetItem.MinTradePrice) ~ CA$ @Html.DisplayFor(model => TargetItem.MaxTradePrice)</h4>
+                    @* TODO: Add link to the user *@
+                    <h4>Seller: @Html.DisplayFor(model => TradeDetails.SellerName)</h4>
+                </div>
+
+
+                <div class="col-12">
+                    <h2>Your Offer</h2>
+                    @foreach (var item in TradeItems)
+                    {
+                        <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title) (CA$ @Html.DisplayFor(modelItem => item.MinTradePrice) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice))</h5>
+                        </a>
+                    }
+                    <h5 class="card-title">Trading Price In Total: CA$ @MinTradePrice ~ CA$ @MaxTradePrice</h5>
+                </div>
+
+                <div class="col-12">
+                    <h2>Message to @Html.DisplayFor(model => TradeDetails.SellerName)</h2>
+                    <h4 style="color:dodgerblue">@Html.DisplayFor(model => TradeDetails.Message)</h4>
+                </div>
+                <div class="col-12">
+                    <h2>Trading Status: @Html.DisplayFor(model => TradeDetails.Status)</h2>
+                </div>
+            </div>
+            <div>
+                <a href="/Identity/Account/Manage/MyTradeRequests">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+

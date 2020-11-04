@@ -1,0 +1,130 @@
+﻿@using TradeAndSell.Models
+@model Trade
+
+@{
+    ViewData["Title"] = "Trade";
+    IEnumerable<Item> TradeItems = ViewData["TradeItems"] as IEnumerable<Item>;
+    Item SelectedItem = ViewData["SelectedItem"] as Item;
+}
+
+<h1>Trade Item</h1>
+
+<div>
+    <h2>Target Item</h2>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="">
+            <div class="row">
+                <div class="col-5">
+                    @if (SelectedItem.ImagePath != null)
+                    {
+                        <img src="~/images/@SelectedItem.ImagePath" class="card-img" alt="Item Image">
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image">
+                    }
+                </div>
+                <div class="col-7">
+                    <h2>
+                        @Html.DisplayFor(model => SelectedItem.Title)
+                    </h2>
+                    <br />
+                    <h4>
+                        @Html.DisplayFor(model => SelectedItem.Condition)
+                    </h4>
+                    <br />
+                    <h4>
+                        Trade Range: CA$ @Html.DisplayFor(model => SelectedItem.MinTradePrice) ~ CA$ @Html.DisplayFor(model => SelectedItem.MaxTradePrice)
+                    </h4>
+                    <br />
+                    <h4>
+                        Seller Location: @Html.DisplayFor(model => SelectedItem.City)
+                    </h4>
+                    <br />
+                    <input type="hidden" asp-for="@SelectedItem.Id" />
+                    <input type="hidden" id="MinTradePrice" value="@SelectedItem.MinTradePrice" />
+                    <input type="hidden" id="MaxTradePrice" value="@SelectedItem.MaxTradePrice" />
+                </div>
+                <br /><br />
+                <div class="col-12">
+                    <h2>Choose your trading items from your posts</h2>
+                    <hr />
+                    @foreach (var item in TradeItems)
+                    {
+                        if (item.AllowTrade == "true") { 
+                            <div class="mb-3" style="max-width: 1400px;">
+                                <div class="row no-gutters">
+                                    <div class="col-md-2">
+                                        <input type="checkbox" class="tradingItems" id="@item.Id" data-min-trade="@item.MinTradePrice" data-max-trade="@item.MaxTradePrice" />
+                                    </div>
+                                    <div class="col-md-10">
+                                        <a asp-action="Details" asp-route-id="@item.Id">
+                                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title) (CA$ @Html.DisplayFor(modelItem => item.MinTradePrice) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice))</h5>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    <h2>Your trading price: CA$ <span id="lowTradingPirce">0</span> ~ CA$ <span id="highTradingPirce">0</span></h2>
+                    <form asp-controller="Trades" asp-action="TradeRequest">
+                        <input type="hidden" asp-for="ItemId" value="@SelectedItem.Id" />
+                        <input type="hidden" asp-for="SellerId" value="@SelectedItem.SellerId" />
+                        <input type="hidden" asp-for="TradeItemIds" value="" id="tradeItemIds" />
+                        <div class="form-group">
+                            <h4 class="control-label">Leave a message to the Seller:</h4>
+                            <textarea asp-for="Message" class="form-control"></textarea>
+                        </div>
+                        <input type="hidden" asp-for="ApproveStatus" value="Pending" />
+                        <input type="submit" id="submitButton" class="btn btn-primary" value="Submit" disabled />
+                    </form>
+                    
+                </div>
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            
+        });
+        var IDList = [];
+        $(".tradingItems").change(function () {
+            var lowTradingPrice = parseInt($("#lowTradingPirce").html());
+            var highTradingPirce = parseInt($("#highTradingPirce").html());
+
+            if ($(this).prop("checked")) {
+                $("#lowTradingPirce").html(lowTradingPrice + parseInt($(this).attr('data-min-trade')));
+                $("#highTradingPirce").html(highTradingPirce + parseInt($(this).attr('data-max-trade')));
+                IDList.push($(this).attr('id'));
+            } else {
+                $("#lowTradingPirce").html(lowTradingPrice - parseInt($(this).attr('data-min-trade')));
+                $("#highTradingPirce").html(highTradingPirce - parseInt($(this).attr('data-max-trade')));
+                const index = IDList.indexOf($(this).attr('id'));
+                if (index > -1) {
+                    IDList.splice(index, 1);
+                }
+            }
+            //console.log(IDList);
+
+            var requiredMinTradePrice = parseInt($("#MinTradePrice").val());
+            var currentMaxTradePrice = parseInt($("#highTradingPirce").html());
+
+            if (currentMaxTradePrice >= requiredMinTradePrice) {
+                $("#submitButton").prop("disabled", false)
+            } else {
+                $("#submitButton").prop("disabled", true)
+            }
+
+            $("#tradeItemIds").val(IDList.join(','))
+
+        });
+    </script>
+}

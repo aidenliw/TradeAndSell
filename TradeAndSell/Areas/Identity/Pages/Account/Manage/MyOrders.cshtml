@@ -31,7 +31,7 @@
                     <p class="card-text">Price: CA$ @Html.DisplayFor(modelItem => item.Price)</p>
                     @if (item.AllowTrade == "true")
                     {
-                        <p class="card-text">Trade Range: CA$ @Html.DisplayFor(modelItem => item.MinTradePirce) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice)</p>
+                        <p class="card-text">Trade Range: CA$ @Html.DisplayFor(modelItem => item.MinTradePrice) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice)</p>
                     }
                     else
                     {

@@ -10,8 +10,8 @@ using TradeAndSell.Data;
 namespace TradeAndSell.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201021223745_order")]
-    partial class order
+    [Migration("20201103215417_trade")]
+    partial class trade
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -226,6 +226,27 @@ namespace TradeAndSell.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("TradeAndSell.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("OnWishList")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cart");
+                });
+
             modelBuilder.Entity("TradeAndSell.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -308,6 +329,39 @@ namespace TradeAndSell.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("TradeAndSell.Models.Trade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApproveStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BuyerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SellerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TradeItemIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trade");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

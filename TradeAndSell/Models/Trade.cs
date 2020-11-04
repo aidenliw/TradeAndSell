@@ -20,8 +20,8 @@ namespace TradeAndSell.Models
         [Display(Name = "Buyer ID")]
         public string BuyerId { get; set; }
 
-        [Display(Name = "Trade Item IDs")]
-        public List<int> TradeItemId { get; set; }
+        [Display(Name = "Trade Item ID")]
+        public string TradeItemIds { get; set; }
 
         [Display(Name = "Date")]
         public DateTime Date { get; set; }

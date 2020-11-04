@@ -281,7 +281,7 @@ namespace TradeAndSell.Data.Migrations
                     b.Property<float?>("MaxTradePrice")
                         .HasColumnType("real");
 
-                    b.Property<float?>("MinTradePirce")
+                    b.Property<float?>("MinTradePrice")
                         .HasColumnType("real");
 
                     b.Property<float>("Price")
@@ -327,6 +327,39 @@ namespace TradeAndSell.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("TradeAndSell.Models.Trade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApproveStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BuyerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SellerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TradeItemIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trade");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -50,7 +50,7 @@ namespace TradeAndSell.Models
         public string AllowTrade { get; set; }
 
         [Display(Name = "Mininum Trade Pirce")]
-        public float? MinTradePirce { get; set; }
+        public float? MinTradePrice { get; set; }
 
         [Display(Name = "Maximum Trade Price")]
         public float? MaxTradePrice { get; set; }

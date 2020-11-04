@@ -154,33 +154,44 @@ namespace TradeAndSell.Controllers
         }
 
         [Authorize(Roles = "Admin, Member")]
-        public IActionResult AddToTrade(int id)
+        public IActionResult Trade(int id)
         {
-            // Get user id
+            // Get user id, if not logged in, return to login page
             var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
 
-            // Get item details
+            // Get selected item details
             IQueryable<Item> items = _context.Item.AsQueryable();
             Item selectedItem = items.Where(i => i.Id == id).FirstOrDefault();
 
-            //// Add the item to the cart of current logged in user
-            //Cart newItem = new Cart()
-            //{
-            //    ItemId = selectedItem.Id,
-            //    OwnerId = userId,
-            //    OnWishList = false
-            //};
-            //_context.Add(newItem);
-            //_context.SaveChanges();
+            if (selectedItem == null)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction("Index", "Carts");
+            // Get the items that posted by current logged in user
+            List<Item> myItems = items.Where(i => i.SellerId == userId).OrderBy(i => i.Title).ToList();
+
+            //var tuple = new Tuple<Item, List<Item>, Trade>(selectedItem, myItems, null);
+
+            ViewData["SelectedItem"] = selectedItem;
+            ViewData["TradeItems"] = myItems;
+
+            return View();
         }
 
         [Authorize(Roles = "Admin, Member")]
         public IActionResult AddToCart(int id) 
         {
-            // Get user id
+            // Get user id, if not logged in, return to login page
             var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
 
             // Get item details
             IQueryable<Item> items = _context.Item.AsQueryable();
@@ -202,8 +213,12 @@ namespace TradeAndSell.Controllers
         [Authorize(Roles = "Admin, Member")]
         public IActionResult AddToWishList(int id)
         {
-            // Get user info
+            // Get user id, if not logged in, return to login page
             var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
 
             // Get item details
             IQueryable<Item> items = _context.Item.AsQueryable();
@@ -252,7 +267,7 @@ namespace TradeAndSell.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice,CreatedDate")] ItemManagement item)
+        public async Task<IActionResult> Create([Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePrice,MaxTradePrice,CreatedDate")] ItemManagement item)
         {
             if (ModelState.IsValid)
             {
@@ -281,7 +296,7 @@ namespace TradeAndSell.Controllers
                     Price = item.Price,
                     Quantity = item.Quantity,
                     AllowTrade = item.AllowTrade,
-                    MinTradePirce = item.MinTradePirce,
+                    MinTradePrice = item.MinTradePrice,
                     MaxTradePrice = item.MaxTradePrice,
                     CreatedDate = DateTime.Now
                 };
@@ -320,7 +335,7 @@ namespace TradeAndSell.Controllers
                 Price = item.Price,
                 Quantity = item.Quantity,
                 AllowTrade = item.AllowTrade,
-                MinTradePirce = item.MinTradePirce,
+                MinTradePrice = item.MinTradePrice,
                 MaxTradePrice = item.MaxTradePrice,
                 CreatedDate = item.CreatedDate
             };
@@ -332,7 +347,7 @@ namespace TradeAndSell.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePirce,MaxTradePrice,CreatedDate")] ItemManagement item)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SellerId,Title,Condition,Description,Category,City,Image,Price,Quantity,AllowTrade,MinTradePrice,MaxTradePrice,CreatedDate")] ItemManagement item)
         {
             if (id != item.Id)
             {
@@ -365,7 +380,7 @@ namespace TradeAndSell.Controllers
                         Price = item.Price,
                         Quantity = item.Quantity,
                         AllowTrade = item.AllowTrade,
-                        MinTradePirce = item.MinTradePirce,
+                        MinTradePrice = item.MinTradePrice,
                         MaxTradePrice = item.MaxTradePrice,
                         CreatedDate = item.CreatedDate
                     };

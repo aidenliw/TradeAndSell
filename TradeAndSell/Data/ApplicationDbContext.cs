@@ -16,5 +16,6 @@ namespace TradeAndSell.Data
         public DbSet<TradeAndSell.Models.Item> Item { get; set; }
         public DbSet<TradeAndSell.Models.Order> Order { get; set; }
         public DbSet<TradeAndSell.Models.Cart> Cart { get; set; }
+        public DbSet<TradeAndSell.Models.Trade> Trade { get; set; }
     }
 }

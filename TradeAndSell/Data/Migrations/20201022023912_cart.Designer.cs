@@ -283,7 +283,7 @@ namespace TradeAndSell.Data.Migrations
                     b.Property<float?>("MaxTradePrice")
                         .HasColumnType("real");
 
-                    b.Property<float?>("MinTradePirce")
+                    b.Property<float?>("MinTradePrice")
                         .HasColumnType("real");
 
                     b.Property<float>("Price")
