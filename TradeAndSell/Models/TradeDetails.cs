@@ -60,6 +60,9 @@ namespace TradeAndSell.Models
         [Display(Name = "Buyer Name")]
         public string BuyerName { get; set; }
 
+        [Display(Name = "Chat ID")]
+        public string ChatId { get; set; }
+
         public string Message { get; set; }
 
         public DateTime Date { get; set; }

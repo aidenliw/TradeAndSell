@@ -28,13 +28,28 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         @* TODO: Link to user details *@
-                        <h5 class="card-title">Request to @Html.DisplayFor(modelItem => item.SellerName)</h5>
+                        <h5 class="card-title"><span class="text-success">Request</span> to @Html.DisplayFor(modelItem => item.SellerName)</h5>
                         <a asp-controller="Items" asp-action="Details" asp-route-id="@item.ItemId">
                             <h5 class="card-title">Request Item: @Html.DisplayFor(modelItem => item.ItemName)</h5>
                         </a>
-                        <h5 class="card-title">Your Offer: @Html.DisplayFor(modelItem => item.TradeItemIds) ETC...</h5>
-                        <h5 class="card-title">Status: @Html.DisplayFor(modelItem => item.Status)</h5>
-                        <a asp-controller="Trades" asp-action="RequestDetails" asp-route-id="@item.TradeId">Details</a>
+                        <h5 class="card-title">Message: @Html.DisplayFor(modelItem => item.Message)</h5>
+                        @if (item.Status.ToLower() == "approved")
+                        {
+                            <h5 class="card-title">Status: <span class="text-success">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else if (item.Status.ToLower() == "pending")
+                        {
+                            <h5 class="card-title">Status: <span class="text-warning">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else if (item.Status.ToLower() == "refused")
+                        {
+                            <h5 class="card-title">Status: <span class="text-danger">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="card-title">Status: @Html.DisplayFor(modelItem => item.Status)</h5>
+                        }
+                        <a class="btn btn-outline-info" asp-controller="Trades" asp-action="RequestDetails" asp-route-id="@item.TradeId">Details</a>
                     </div>
                 </div>
             }
@@ -55,13 +70,28 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         @* TODO: Link to user details *@
-                        <h5 class="card-title">Offer from @Html.DisplayFor(modelItem => item.BuyerName)</h5>
+                        <h5 class="card-title"><span class="text-success">Offer</span> from @Html.DisplayFor(modelItem => item.BuyerName)</h5>
                         <a asp-controller="Items" asp-action="Details" asp-route-id="@item.ItemId">
                             <h5 class="card-title">Your Item: @Html.DisplayFor(modelItem => item.ItemName)</h5>
                         </a>
-                        <h5 class="card-title">Offer: @Html.DisplayFor(modelItem => item.TradeItemIds) ETC...</h5>
-                        <h5 class="card-title">Status: @Html.DisplayFor(modelItem => item.Status)</h5>
-                        <a asp-controller="Trades" asp-action="OfferDetails" asp-route-id="@item.TradeId">Details</a>
+                        <h5 class="card-title">Message: @Html.DisplayFor(modelItem => item.Message)</h5>
+                        @if (item.Status.ToLower() == "approved")
+                        {
+                            <h5 class="card-title">Status: <span class="text-success">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else if (item.Status.ToLower() == "pending")
+                        {
+                            <h5 class="card-title">Status: <span class="text-warning">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else if (item.Status.ToLower() == "refused")
+                        {
+                            <h5 class="card-title">Status: <span class="text-danger">@Html.DisplayFor(modelItem => item.Status)</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="card-title">Status: @Html.DisplayFor(modelItem => item.Status)</h5>
+                        }
+                        <a class="btn btn-outline-info" asp-controller="Trades" asp-action="OfferDetails" asp-route-id="@item.TradeId">Details</a>
                     </div>
                 </div>
             }

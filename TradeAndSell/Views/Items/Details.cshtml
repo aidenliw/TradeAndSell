@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    string MyItem = ViewData["MyItem"] as string;
 }
 
 <h1>Details</h1>
@@ -45,46 +46,58 @@
                     }
                     <br />
                     <input type="hidden" asp-for="Id" />
-                    <input type="button" class="btn btn-primary" id="checkout-button" value="Buy" />
-                    <script src="https://js.stripe.com/v3/"></script>
-                    <script type="text/javascript">
-                        // Create an instance of the Stripe object with your publishable API key
-                        var stripe = Stripe('pk_test_qfqpYTsq4Wxr7Su4VweI1pGi00kCTVhkb0');
-                        var checkoutButton = document.getElementById('checkout-button');
-                        checkoutButton.addEventListener('click', function () {
-                            // Create a new Checkout Session using the server-side endpoint you
-                            // created in step 3.
-                            fetch('/create-checkout-session', {
-                                method: 'POST',
-                            })
-                                .then(function (response) {
-                                    return response.json();
-                                })
-                                .then(function (session) {
-                                    return stripe.redirectToCheckout({ sessionId: session.id });
-                                })
-                                .then(function (result) {
-                                    // If `redirectToCheckout` fails due to a browser or network
-                                    // error, you should display the localized error message to your
-                                    // customer using `error.message`.
-                                    if (result.error) {
-                                        alert(result.error.message);
-                                    }
-                                })
-                                .catch(function (error) {
-                                    console.error('Error:', error);
+                    @if (MyItem == "false")
+                    {
+                        <div>
+                            <input type="button" class="btn btn-primary" id="checkout-button" value="Buy" />
+                            <script src="https://js.stripe.com/v3/"></script>
+                            <script type="text/javascript">
+                                // Create an instance of the Stripe object with your publishable API key
+                                var stripe = Stripe('pk_test_qfqpYTsq4Wxr7Su4VweI1pGi00kCTVhkb0');
+                                var checkoutButton = document.getElementById('checkout-button');
+                                checkoutButton.addEventListener('click', function () {
+                                    // Create a new Checkout Session using the server-side endpoint you
+                                    // created in step 3.
+                                    fetch('/create-checkout-session', {
+                                        method: 'POST',
+                                    })
+                                        .then(function (response) {
+                                            return response.json();
+                                        })
+                                        .then(function (session) {
+                                            return stripe.redirectToCheckout({ sessionId: session.id });
+                                        })
+                                        .then(function (result) {
+                                            // If `redirectToCheckout` fails due to a browser or network
+                                            // error, you should display the localized error message to your
+                                            // customer using `error.message`.
+                                            if (result.error) {
+                                                alert(result.error.message);
+                                            }
+                                        })
+                                        .catch(function (error) {
+                                            console.error('Error:', error);
+                                        });
                                 });
-                        });
-                    </script>
-                    @if (Model.AllowTrade == "true")
-                    {
-                       <a class="btn btn-success" asp-action="Trade" asp-route-id="@Model.Id">Trade</a>
+                            </script>
+                            @if (Model.AllowTrade == "true")
+                            {
+                                <a class="btn btn-success" asp-action="Trade" asp-route-id="@Model.Id">Trade</a>
+                            }
+                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Member") || User.IsInRole("Admin")))
+                            {
+                                <a class="btn btn-outline-primary" asp-action="AddToCart" asp-route-id="@Model.Id">Add to Cart</a>
+                                <a class="btn btn-outline-success" asp-action="AddToWishList" asp-route-id="@Model.Id">Add to Wish List</a>
+                            }
+                        </div>
                     }
-                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Member") || User.IsInRole("Admin")))
+                    else 
                     {
-                        <a class="btn btn-outline-primary" asp-action="AddToCart" asp-route-id="@Model.Id">Add to Cart</a>
-                        <a class="btn btn-outline-success" asp-action="AddToWishList" asp-route-id="@Model.Id">Add to Wish List</a>
+                        <div class="alert alert-info" role="alert">
+                            This is your item.
+                        </div>
                     }
+
                 </div>
                 <div class="col-12">
                     <h5>Description:</h5>

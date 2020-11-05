@@ -65,13 +65,15 @@
                             <h2>Reply to @Html.DisplayFor(model => TradeDetails.BuyerName)</h2>
                             <form asp-controller="Trades" asp-action="">
                                 <input type="hidden" asp-for="Id" />
+                                <input type="hidden" asp-for="SellerId" value="@TradeDetails.SellerId" />
                                 <input type="hidden" asp-for="BuyerId" value="@TradeDetails.BuyerId" />
+                                <input type="hidden" asp-for="ChatId" value="@TradeDetails.ChatId" />
                                 <textarea asp-for="Message" class="form-control" id="message"></textarea>
                                 <br />
                                 <button asp-action="TradeAccept" asp-controller="Trades" class="btn btn-success">Accept</button>
                                 <button asp-action="TradeRefuse" asp-controller="Trades" class="btn btn-danger">Refuse</button>
                                 @*<input type="submit" class="btn btn-success" value="Accept" formaction="TradeAccept" />
-                                <input type="submit" class="btn btn-danger" value="Refuse" formaction="TradeRefuse" />*@
+        <input type="submit" class="btn btn-danger" value="Refuse" formaction="TradeRefuse" />*@
                             </form>
                         </div>
                     </div>

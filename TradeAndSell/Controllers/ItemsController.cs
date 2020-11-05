@@ -252,6 +252,16 @@ namespace TradeAndSell.Controllers
             {
                 return NotFound();
             }
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            if (user.Id == item.SellerId)
+            {
+                ViewData["MyItem"] = "true";
+            }
+            else 
+            {
+                ViewData["MyItem"] = "false";
+            }
+
             return View(item);
         }
 

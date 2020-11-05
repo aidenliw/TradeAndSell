@@ -26,6 +26,9 @@ namespace TradeAndSell.Models
         [Display(Name = "Date")]
         public DateTime Date { get; set; }
 
+        [Display(Name = "Chat ID")]
+        public string ChatId { get; set; }
+
         [Display(Name = "Message")]
         public string Message { get; set; }
 

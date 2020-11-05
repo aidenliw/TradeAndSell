@@ -1,0 +1,42 @@
+﻿@model TradeAndSell.Models.Message
+
+@{
+    ViewData["Title"] = "Chat";
+    string TargetUser = ViewData["TargetUser"] as string;
+    string CurrentChatId = ViewData["CurrentChatId"] as string;
+    Message SenderInfo = ViewData["SenderInfo"] as Message;
+    Message ReceiverInfo = ViewData["ReceiverInfo"] as Message;
+    IEnumerable<MessageDetails> MessageDetails = ViewData["MessageDetails"] as IEnumerable<MessageDetails>;
+}
+
+<h1>@TargetUser</h1>
+<hr />
+<div>
+    <div class="row">
+        @foreach (var message in MessageDetails)
+        {
+            <div class="col-12">
+                <h4>@message.SenderName (@message.Datetime)</h4>
+                <h5>@message.Content</h5>
+                <hr />
+            </div>
+        }
+        <div class="col-12">
+            <div class="form-group">
+                <h2>Reply to @TargetUser</h2>
+                <form asp-controller="Messages" asp-action="SendChat">
+                    @*<input type="hidden" asp-for="Id" />*@
+                    <input type="hidden" asp-for="ChatId" value="@CurrentChatId" />
+                    <input type="hidden" asp-for="SenderId" value="@ReceiverInfo.ReceiverId" />
+                    <input type="hidden" asp-for="ReceiverId" value="@ReceiverInfo.SenderId" />
+                    <textarea asp-for="Content" class="form-control" id="message"></textarea>
+                    <br />
+                    <input type="submit" class="btn btn-primary" value="Send" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a href="/Identity/Account/Manage/MyMessages">Back to List</a>
+</div>

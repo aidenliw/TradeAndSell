@@ -121,6 +121,7 @@ namespace TradeAndSell.Controllers
                 SellerName = users.Where(u => u.Id == trade.SellerId).Select(u => u.DisplayName).FirstOrDefault(),
                 BuyerId = trade.BuyerId,
                 BuyerName = users.Where(u => u.Id == trade.BuyerId).Select(u => u.DisplayName).FirstOrDefault(),
+                ChatId = trade.ChatId,
                 Message = trade.Message,
                 Date = trade.Date,
                 MyRequest = user.Id == trade.BuyerId ? true : false
@@ -132,28 +133,6 @@ namespace TradeAndSell.Controllers
             ViewData["MinTradePrice"] = totalMinTradePrice;
             ViewData["MaxTradePrice"] = totalMaxTradePrice;
 
-            return View(trade);
-        }
-
-        // GET: Trades/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Trades/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ItemId,SellerId,BuyerId,TradeItemIds,Date,Message,ApproveStatus")] Trade trade)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(trade);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             return View(trade);
         }
 
@@ -173,9 +152,24 @@ namespace TradeAndSell.Controllers
 
             if (ModelState.IsValid)
             {
+                string chatId = Guid.NewGuid().ToString();
+
+                trade.ChatId = chatId;
                 trade.BuyerId = userId;
                 trade.Date = DateTime.Now;
                 _context.Add(trade);
+
+                
+                Message newMessage = new Message()
+                {
+                    ChatId = chatId,
+                    SenderId = userId,
+                    ReceiverId = trade.SellerId,
+                    Content = trade.Message,
+                    Datetime = DateTime.Now
+                };
+
+                _context.Add(newMessage);
                 await _context.SaveChangesAsync();
             }
             return RedirectToPage("/Account/Manage/MyTradeRequests", new { area = "Identity" });
@@ -184,7 +178,7 @@ namespace TradeAndSell.Controllers
         // POST: Trades/TradeAccept/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TradeAccept(int id, [Bind("Id,BuyerId")] Trade trade)
+        public async Task<IActionResult> TradeAccept(int id, [Bind("Id,ChatId,SellerId,BuyerId,Message")] Trade trade)
         {
             if (id != trade.Id)
             {
@@ -200,6 +194,17 @@ namespace TradeAndSell.Controllers
                     theTrade.ApproveStatus = "Approved";
                     _context.Entry(theTrade).Property("ApproveStatus").IsModified = true;
                     //_context.Update(trade);
+                    
+                    Message newMessage = new Message()
+                    {
+                        ChatId = trade.ChatId,
+                        SenderId = trade.SellerId,
+                        ReceiverId = trade.BuyerId,
+                        Content = trade.Message,
+                        Datetime = DateTime.Now
+                    };
+
+                    _context.Add(newMessage);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -220,7 +225,7 @@ namespace TradeAndSell.Controllers
         // POST: Trades/TradeRefuse/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TradeRefuse(int id, [Bind("Id,BuyerId")] Trade trade)
+        public async Task<IActionResult> TradeRefuse(int id, [Bind("Id,ChatId,SellerId,BuyerId,Message")] Trade trade)
         {
             if (id != trade.Id)
             {
@@ -236,6 +241,17 @@ namespace TradeAndSell.Controllers
                     theTrade.ApproveStatus = "Refused";
                     _context.Entry(theTrade).Property("ApproveStatus").IsModified = true;
                     //_context.Update(trade);
+
+                    Message newMessage = new Message()
+                    {
+                        ChatId = trade.ChatId,
+                        SenderId = trade.SellerId,
+                        ReceiverId = trade.BuyerId,
+                        Content = trade.Message,
+                        Datetime = DateTime.Now
+                    };
+
+                    _context.Add(newMessage);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -251,6 +267,29 @@ namespace TradeAndSell.Controllers
                 }
             }
             return RedirectToPage("/Account/Manage/MyTradeRequests", new { area = "Identity" });
+        }
+
+
+        // GET: Trades/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Trades/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,ItemId,SellerId,BuyerId,TradeItemIds,Date,ChatId,Message,ApproveStatus")] Trade trade)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(trade);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(trade);
         }
 
         [Authorize(Roles = "Admin")]
@@ -275,7 +314,7 @@ namespace TradeAndSell.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemId,SellerId,BuyerId,TradeItemIds,Date,Message,ApproveStatus")] Trade trade)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemId,SellerId,BuyerId,TradeItemIds,Date,ChatId,Message,ApproveStatus")] Trade trade)
         {
             if (id != trade.Id)
             {

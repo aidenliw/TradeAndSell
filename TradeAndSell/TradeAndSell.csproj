@@ -10,6 +10,8 @@
     <Compile Remove="Data\Migrations\20200914001811_models.Designer.cs" />
     <Compile Remove="Data\Migrations\20201104224444_fix-typo.cs" />
     <Compile Remove="Data\Migrations\20201104224444_fix-typo.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201105154011_message.cs" />
+    <Compile Remove="Data\Migrations\20201105154011_message.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

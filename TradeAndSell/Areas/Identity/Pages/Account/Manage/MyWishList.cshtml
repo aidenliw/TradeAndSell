@@ -39,8 +39,8 @@
                     }
                     <p>At @Html.DisplayFor(modelItem => item.City)</p>
 
-                    <a class="btn btn-outline-info" asp-controller="Carts" asp-action="MoveToCart" asp-route-id="@item.Id">Move to cart</a>
-                    <a class="btn btn-outline-success" asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-outline-success" asp-controller="Carts" asp-action="MoveToCart" asp-route-id="@item.Id">Move to cart</a>
+                    <a class="btn btn-outline-info" asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     <a class="btn btn-outline-danger" asp-controller="Carts" asp-action="DeleteFromWishList" asp-route-id="@item.Id">Delete</a>
                 </div>
             </div>
