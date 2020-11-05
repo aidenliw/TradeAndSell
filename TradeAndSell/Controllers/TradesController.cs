@@ -83,9 +83,10 @@ namespace TradeAndSell.Controllers
             return View(trade);
         }
 
-        // GET: Trades/RequestDetails/5
+        // GET: Trades/OfferDetails/5
         public async Task<IActionResult> OfferDetails(int? id)
         {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
@@ -102,8 +103,34 @@ namespace TradeAndSell.Controllers
             List<int> tradeItemIds = trade.TradeItemIds.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
             List<Item> tradeItems = items.Where(i => tradeItemIds.Contains(i.Id)).ToList();
 
+            int totalMinTradePrice = tradeItems.Sum(ti => (int)ti.MinTradePrice);
+            int totalMaxTradePrice = tradeItems.Sum(ti => (int)ti.MaxTradePrice);
+
+            IQueryable<ApplicationUser> users = _userManager.Users.AsQueryable();
+
+            TradeDetails tradeDetails = new TradeDetails
+            {
+                TradeId = trade.Id,
+                ItemId = targetItem.Id,
+                ItemName = targetItem.Title,
+                ItemImagePath = targetItem.ImagePath,
+                TradeItemIds = trade.TradeItemIds,
+                TradeItemIdList = trade.TradeItemIds.Split(',', StringSplitOptions.RemoveEmptyEntries),
+                Status = trade.ApproveStatus,
+                SellerId = trade.SellerId,
+                SellerName = users.Where(u => u.Id == trade.SellerId).Select(u => u.DisplayName).FirstOrDefault(),
+                BuyerId = trade.BuyerId,
+                BuyerName = users.Where(u => u.Id == trade.BuyerId).Select(u => u.DisplayName).FirstOrDefault(),
+                Message = trade.Message,
+                Date = trade.Date,
+                MyRequest = user.Id == trade.BuyerId ? true : false
+            };
+
             ViewData["TargetItem"] = targetItem;
             ViewData["TradeItems"] = tradeItems;
+            ViewData["TradeDetails"] = tradeDetails;
+            ViewData["MinTradePrice"] = totalMinTradePrice;
+            ViewData["MaxTradePrice"] = totalMaxTradePrice;
 
             return View(trade);
         }
@@ -130,7 +157,7 @@ namespace TradeAndSell.Controllers
             return View(trade);
         }
 
-        // POST: Trades/Create
+        // POST: Trades/TradeRequest
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -150,6 +177,78 @@ namespace TradeAndSell.Controllers
                 trade.Date = DateTime.Now;
                 _context.Add(trade);
                 await _context.SaveChangesAsync();
+            }
+            return RedirectToPage("/Account/Manage/MyTradeRequests", new { area = "Identity" });
+        }
+
+        // POST: Trades/TradeAccept/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TradeAccept(int id, [Bind("Id,BuyerId")] Trade trade)
+        {
+            if (id != trade.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    IQueryable<Trade> trades = _context.Trade.AsQueryable();
+                    Trade theTrade = trades.Where(t => t.Id == trade.Id).FirstOrDefault();
+                    theTrade.ApproveStatus = "Approved";
+                    _context.Entry(theTrade).Property("ApproveStatus").IsModified = true;
+                    //_context.Update(trade);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TradeExists(trade.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return RedirectToPage("/Account/Manage/MyTradeRequests", new { area = "Identity" });
+        }
+
+        // POST: Trades/TradeRefuse/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TradeRefuse(int id, [Bind("Id,BuyerId")] Trade trade)
+        {
+            if (id != trade.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    IQueryable<Trade> trades = _context.Trade.AsQueryable();
+                    Trade theTrade = trades.Where(t => t.Id == trade.Id).FirstOrDefault();
+                    theTrade.ApproveStatus = "Refused";
+                    _context.Entry(theTrade).Property("ApproveStatus").IsModified = true;
+                    //_context.Update(trade);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TradeExists(trade.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
             return RedirectToPage("/Account/Manage/MyTradeRequests", new { area = "Identity" });
         }
