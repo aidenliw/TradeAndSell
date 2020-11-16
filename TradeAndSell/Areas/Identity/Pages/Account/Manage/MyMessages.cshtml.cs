@@ -41,7 +41,8 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
             //    .Select(m => m.OrderByDescending(o => o.Datetime).FirstOrDefault())
             //    .ToList();
             var test = messages.GroupBy(m => m.ChatId).Select(m => m.OrderByDescending(o => o.Datetime).First());
-            MessageList = messages.Where(m => m.ReceiverId == user.Id).OrderByDescending(m => m.Datetime).Select(m => new MessageDetails { 
+
+            MessageList = messages.Where(m => m.ReceiverId == user.Id && m.Content != null).OrderByDescending(m => m.Datetime).Select(m => new MessageDetails { 
                 Id = m.Id,
                 ChatId = m.ChatId,
                 SenderId = m.SenderId,

@@ -12,6 +12,11 @@
     <li class="nav-item"><a class="nav-link @ManageNavPages.MyWishListNavClass(ViewContext)" id="my-wish-list" asp-page="./MyWishList">My Wish List</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.MyTradeRequestsNavClass(ViewContext)" id="my-trade-requests" asp-page="./MyTradeRequests">Trade Requests</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.MyMessagesNavClass(ViewContext)" id="my-messages" asp-page="./MyMessages">Messages</a></li>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.MyAccountsNavClass(ViewContext)" id="my-accounts" asp-page="./MyAccounts">Accounts</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.MyManageNavClass(ViewContext)" id="my-manage" asp-page="./MyManage">Manage</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.MyDataNavClass(ViewContext)" id="my-data" asp-page="./MyData">Site Usage Data</a></li>
+    }
     @if (hasExternalLogins)
     {
         <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>

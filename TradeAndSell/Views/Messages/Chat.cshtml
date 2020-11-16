@@ -4,22 +4,24 @@
     ViewData["Title"] = "Chat";
     string TargetUser = ViewData["TargetUser"] as string;
     string CurrentChatId = ViewData["CurrentChatId"] as string;
-    Message SenderInfo = ViewData["SenderInfo"] as Message;
-    Message ReceiverInfo = ViewData["ReceiverInfo"] as Message;
+    Message ChatInfo = ViewData["ChatInfo"] as Message;
     IEnumerable<MessageDetails> MessageDetails = ViewData["MessageDetails"] as IEnumerable<MessageDetails>;
 }
 
-<h1>@TargetUser</h1>
+<h1><a asp-controller="Account" asp-action="Details" asp-route-id="@ChatInfo.ReceiverId">@TargetUser</a></h1>
 <hr />
 <div>
     <div class="row">
         @foreach (var message in MessageDetails)
         {
-            <div class="col-12">
-                <h4>@message.SenderName (@message.Datetime)</h4>
-                <h5>@message.Content</h5>
-                <hr />
-            </div>
+            if (message.Content != null)
+            {
+                <div class="col-12">
+                    <h4>@message.SenderName (@message.Datetime)</h4>
+                    <h5>@message.Content</h5>
+                    <hr />
+                </div>
+            }
         }
         <div class="col-12">
             <div class="form-group">
@@ -27,8 +29,8 @@
                 <form asp-controller="Messages" asp-action="SendChat">
                     @*<input type="hidden" asp-for="Id" />*@
                     <input type="hidden" asp-for="ChatId" value="@CurrentChatId" />
-                    <input type="hidden" asp-for="SenderId" value="@ReceiverInfo.ReceiverId" />
-                    <input type="hidden" asp-for="ReceiverId" value="@ReceiverInfo.SenderId" />
+                    <input type="hidden" asp-for="SenderId" value="@ChatInfo.SenderId" />
+                    <input type="hidden" asp-for="ReceiverId" value="@ChatInfo.ReceiverId" />
                     <textarea asp-for="Content" class="form-control" id="message"></textarea>
                     <br />
                     <input type="submit" class="btn btn-primary" value="Send" />
@@ -38,5 +40,5 @@
     </div>
 </div>
 <div>
-    <a href="/Identity/Account/Manage/MyMessages">Back to List</a>
+    <a href="/Identity/Account/Manage/MyMessages">Back to Message List</a>
 </div>

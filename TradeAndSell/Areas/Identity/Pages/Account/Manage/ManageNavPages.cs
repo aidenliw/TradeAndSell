@@ -26,6 +26,12 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
 
         public static string MyMessages => "MyMessages";
 
+        public static string MyAccounts => "MyAccounts";
+
+        public static string MyManage => "MyManage";
+
+        public static string MyData => "MyData";
+
         public static string DownloadPersonalData => "DownloadPersonalData";
 
         public static string DeletePersonalData => "DeletePersonalData";
@@ -53,6 +59,12 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
         public static string MyTradeRequestsNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyTradeRequests);
         
         public static string MyMessagesNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyMessages);
+
+        public static string MyAccountsNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyAccounts);
+
+        public static string MyManageNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyManage);
+
+        public static string MyDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyData);
 
         public static string DownloadPersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DownloadPersonalData);
 

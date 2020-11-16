@@ -1,0 +1,12 @@
+﻿@page
+@model MyManageModel
+@{
+    ViewData["Title"] = "My Manage";
+    ViewData["ActivePage"] = ManageNavPages.MyManage;
+}
+
+<h4>Access to the Manage System of All Controllers In Table's View</h4>
+
+<a class="btn btn-outline-primary"  asp-controller="Items" asp-action="IndexTable">All Items</a>
+<a class="btn btn-outline-primary" asp-controller="Trades" asp-action="Index">All Trades</a>
+<a class="btn btn-outline-primary" asp-controller="Messages" asp-action="Index">All Messages</a>

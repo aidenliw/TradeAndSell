@@ -1,0 +1,83 @@
+﻿@using TradeAndSell.Models
+@using TradeAndSell.Data
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = "User Details";
+    IEnumerable<Item> UserPosts = ViewData["UserPosts"] as IEnumerable<Item>;
+    string CurrentUserID = ViewData["CurrentUserID"] as string;
+}
+
+<div class="row">
+    <div class="col-10">
+        <h1>@Model.DisplayName</h1>
+    </div>
+    <div class="col-2">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            if (Model.Id == CurrentUserID)
+            {
+                <a class="btn btn-outline-danger btn-block mb-1 disabled">Delete Account</a>
+            }
+            else
+            {
+                <a class="btn btn-outline-danger btn-block mb-1" asp-controller="Account" asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Are you sure you want to delete user: @Model.DisplayName')">Delete Account</a>
+            }
+
+        }
+        @if (Model.Id != CurrentUserID)
+        {
+            <a class="btn btn-outline-success btn-block" asp-controller="Messages" asp-action="Chat" asp-route-targetUser="@Model.Id">Send a Message</a>
+        }
+
+    </div>
+</div>
+
+<h2>Posts</h2>
+<hr />
+@foreach (var item in UserPosts)
+{
+    <div class="card mb-3" style="max-width: 1400px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                    @if (item.ImagePath != null)
+                    {
+                        <img src="~/images/@item.ImagePath" class="card-img" alt="Item Image" style="max-height:250px; object-fit:contain; margin:auto;">
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image" style="max-height:250px; object-fit:contain">
+                    }
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                    </a>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Condition)</p>
+                    <p class="card-text">Price: CA$ @Html.DisplayFor(modelItem => item.Price)</p>
+                    @if (item.AllowTrade == "true")
+                    {
+                        <p class="card-text">Trade Range: CA$ @Html.DisplayFor(modelItem => item.MinTradePrice) ~ CA$ @Html.DisplayFor(modelItem => item.MaxTradePrice)</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Trade Not Allowed</p>
+                    }
+                    <p>At @Html.DisplayFor(modelItem => item.City)</p>
+                    
+                    <a class="btn btn-outline-info" asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (UserPosts.Count() == 0)
+{
+    <p>No Items to display.</p>
+}
+
+

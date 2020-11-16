@@ -25,15 +25,38 @@ namespace TradeAndSell.Controllers
         }
 
         // GET: Messages/Chat/5
-        public async Task<IActionResult> Chat(string chatId)
+        public async Task<IActionResult> CreateChat(string targetUserId)
         {
+            string newChatId = Guid.NewGuid().ToString();
+            //ApplicationUser user = await _userManager.GetUserAsync(User);
+
+            //Message newMessage = new Message()
+            //{
+            //    ChatId = newChatId,
+            //    SenderId = user.Id,
+            //    ReceiverId = targetUserId,
+            //    Content = null,
+            //    Datetime = DateTime.Now
+            //};
+
+            //_context.Add(newMessage);
+            //await _context.SaveChangesAsync();
+
+            return RedirectToAction("Chat", new { chatId = newChatId, targetUser = targetUserId });
+        }
+
+        // GET: Messages/Chat/5
+        public async Task<IActionResult> Chat(string chatId, string targetUser)
+        {
+            // New chat
             if (chatId == null)
             {
-                return NotFound();
+                chatId = Guid.NewGuid().ToString();
             }
             ApplicationUser user = await _userManager.GetUserAsync(User);
             IQueryable<ApplicationUser> users = _userManager.Users.AsQueryable();
 
+            // Get all the messages by the chat Id
             IQueryable<MessageDetails> messages = _context.Message.Where(m => m.ChatId == chatId).OrderBy(m => m.Datetime)
                 .Select(m => new MessageDetails {
                     Id = m.Id,
@@ -45,19 +68,13 @@ namespace TradeAndSell.Controllers
                     Content = m.Content,
                     Datetime = m.Datetime
                 });
-            if (messages == null)
-            {
-                return NotFound();
-            }
 
-            Message senderInfo = _context.Message.Where(m => m.SenderId == user.Id).FirstOrDefault();
-            Message receiverInfo = _context.Message.Where(m => m.ReceiverId == user.Id).FirstOrDefault();
-            ViewData["SenderInfo"] = senderInfo;
-            ViewData["ReceiverInfo"] = receiverInfo;
+            Message ChatInfo = new Message { ChatId = chatId, SenderId = user.Id, ReceiverId = targetUser };
+            
+            ViewData["ChatInfo"] = ChatInfo;
             ViewData["CurrentChatId"] = chatId;
             // Get the name of the chat user
-            ViewData["TargetUser"] = users.Where(u => u.Id == receiverInfo.SenderId).Select(m => m.DisplayName).FirstOrDefault();
-            
+            ViewData["TargetUser"] = users.Where(u => u.Id == ChatInfo.ReceiverId).Select(m => m.DisplayName).FirstOrDefault();
             ViewData["MessageDetails"] = await messages.ToListAsync();
 
             return View();
@@ -76,7 +93,7 @@ namespace TradeAndSell.Controllers
                 _context.Add(message);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Chat", new { chatId = message.ChatId });
+            return RedirectToAction("Chat", new { chatId = message.ChatId, targetUser = message.ReceiverId });
         }
 
         // POST: Carts/DeleteChat/5

@@ -1,8 +1,10 @@
-﻿@model TradeAndSell.Models.Item
+﻿@using TradeAndSell.Data
+@model TradeAndSell.Models.Item
 
 @{
     ViewData["Title"] = "Details";
     string MyItem = ViewData["MyItem"] as string;
+    ApplicationUser SellerInfo = ViewData["SellerInfo"] as ApplicationUser;
 }
 
 <h1>Details</h1>
@@ -24,13 +26,20 @@
                     }
                 </div>
                 <div class="col-7">
-                    <h2>
-                        @Html.DisplayFor(model => model.Title)
-                    </h2>
+                    <div class="row">
+                        <div class="col-6">
+                            <h2>@Html.DisplayFor(model => model.Title)</h2>
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="col-6">
+                                <h4>Seller: <a asp-controller="Account" asp-action="Details" asp-route-id="@SellerInfo.Id">@SellerInfo.DisplayName</a></h4>
+                            </div>
+                        }
+
+                    </div>
                     <br />
-                    <h4>
-                        @Html.DisplayFor(model => model.Condition)
-                    </h4>
+                    <h4>@Html.DisplayFor(model => model.Condition)</h4>
                     <br />
                     <h4>Quantity Left: @Html.DisplayFor(model => model.Quantity)</h4>
                     <h4>

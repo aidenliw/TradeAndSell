@@ -114,6 +114,13 @@ namespace TradeAndSell.Controllers
             return View(await items.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
+        // GET: Trades
+        public async Task<IActionResult> IndexTable()
+        {
+            return View(await _context.Item.ToListAsync());
+        }
+
         [HttpPost("create-checkout-session")]
         public ActionResult CreateCheckoutSession()
         {
@@ -253,7 +260,10 @@ namespace TradeAndSell.Controllers
                 return NotFound();
             }
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            if (user.Id == item.SellerId)
+            ApplicationUser sellerInfo = _userManager.Users.Where(u => u.Id == item.SellerId).FirstOrDefault();
+            ViewData["SellerInfo"] = sellerInfo;
+
+            if (user != null && user.Id == item.SellerId)
             {
                 ViewData["MyItem"] = "true";
             }

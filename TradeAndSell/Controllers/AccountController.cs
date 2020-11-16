@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TradeAndSell.Data;
 using TradeAndSell.Models;
 
@@ -13,11 +14,68 @@ namespace TradeAndSell.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> RoleManager)
+        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> RoleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = RoleManager;
+            _context = context;
+        }
+
+        // GET: Account/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ApplicationUser currentUser = await _userManager.GetUserAsync(User);
+            IQueryable<ApplicationUser> users = _userManager.Users;
+
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            IQueryable<Item> items = _context.Item.Where(i => i.SellerId == user.Id);
+
+            ViewData["CurrentUserID"] = currentUser.Id; ;
+            ViewData["UserPosts"] = items;
+
+            return View(user);
+        }
+
+        // GET: Account/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _userManager.FindByIdAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var result = await _userManager.DeleteAsync(account);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToPage("/Account/Manage/MyAccounts", new { area = "Identity" });
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return RedirectToPage("/Account/Manage/MyAccounts", new { area = "Identity" });
+            }
         }
 
         //Seed the database with users, roles and assign users to roles. To call this method, use https://localhost:44387/Account/SeedUserData

@@ -14,13 +14,16 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-10">
-                            <h5 class="card-title">From @Html.DisplayFor(modelItem => item.SenderName)</h5>
+                            <h5 class="card-title">
+                                From 
+                                <a asp-controller="Account" asp-action="Details" asp-route-id="@item.SenderId">@Html.DisplayFor(modelItem => item.SenderName)</a>
+                            </h5>
                             <h5 class="card-title">Message: @Html.DisplayFor(modelItem => item.Content)</h5>
                             <p class="">@Html.DisplayFor(modelItem => item.Datetime)</p>
                         </div>
                         <div class="col-md-2">
-                            <a class="btn btn-outline-info btn-block mb-1" asp-controller="Messages" asp-action="Chat" asp-route-ChatId="@item.ChatId">Reply</a>
-                            <a class="btn btn-outline-danger btn-block" asp-controller="Messages" asp-action="DeleteChat" asp-route-ChatId="@item.ChatId">Delete</a>
+                            <a class="btn btn-outline-info btn-block mb-1" asp-controller="Messages" asp-action="Chat" asp-route-chatId="@item.ChatId" asp-route-targetUser="@item.SenderId">Reply</a>
+                            <a class="btn btn-outline-danger btn-block" asp-controller="Messages" asp-action="DeleteChat" asp-route-chatId="@item.ChatId">Delete</a>
                         </div>
                     </div>
                 </div>

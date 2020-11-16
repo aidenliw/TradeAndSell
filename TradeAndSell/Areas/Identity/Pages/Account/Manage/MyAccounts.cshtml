@@ -1,0 +1,42 @@
+﻿@page
+@model MyAccountsModel
+@{
+    ViewData["Title"] = "Accounts";
+    ViewData["ActivePage"] = ManageNavPages.MyAccounts;
+}
+
+<h4>@ViewData["Title"]</h4>
+@foreach (var user in Model.UserList)
+{
+    <div class="card mb-3" style="max-width: 1400px;">
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <a asp-controller="Account" asp-action="Details" asp-route-id="@user.Id">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => user.DisplayName)</h5>
+                            </a>
+                            <a href="mailto:@user.Email">@Html.DisplayFor(modelItem => user.Email)</a>
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-info btn-block mb-1" asp-controller="Account" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                            @if (user.Id == Model.CurrentUserID)
+                            {
+                                <a class="btn btn-outline-danger btn-block disabled">Delete</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-danger btn-block" asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id" onclick="return confirm('Are you sure you want to delete user: @user.DisplayName')">Delete</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.UserList.Count == 0)
+{
+    <p>No Users to display.</p>
+}
