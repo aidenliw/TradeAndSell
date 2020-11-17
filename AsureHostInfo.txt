@@ -1,0 +1,3 @@
+Asure SQL DB Credentials
+Admin: mohawkadmin
+Password: Mohawk1!

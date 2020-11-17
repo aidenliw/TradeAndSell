@@ -325,7 +325,7 @@ namespace TradeAndSell.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(item);
+            return RedirectToPage("/Account/Manage/MyPosts", new { area = "Identity" });
         }
 
         // GET: Items/Edit/5
@@ -425,7 +425,7 @@ namespace TradeAndSell.Controllers
         }
 
         // GET: Items/Delete/5
-        [Authorize(Roles = "Admin, Member")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -457,6 +457,30 @@ namespace TradeAndSell.Controllers
         private bool ItemExists(int id)
         {
             return _context.Item.Any(e => e.Id == id);
+        }
+
+        // POST: Carts/Delete/5
+        public async Task<IActionResult> DeleteFromPosts(int? id)
+        {
+            string userId = _userManager.GetUserId(User);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.Item
+                .FirstOrDefaultAsync(m => m.Id == id && m.SellerId == userId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Item.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage("/Account/Manage/MyPosts", new { area = "Identity" });
         }
     }
 }
