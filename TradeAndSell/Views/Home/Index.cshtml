@@ -1,16 +1,56 @@
-﻿@{
+﻿@using TradeAndSell.Models
+@model IEnumerable<Item>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Trade & Sell</h1>
-    <br />
-    <h3><strong>Trade and Sell Your Items!</strong></h3>
-    <h4>Welcome to our trade and sell web application!</h4>
-    <h4>By using this app, you can trade or sell your items locally!</h4>
-    <h4>We are mainly focus on the items of <a style="color:orange">USED BOOKS</a>, <a style="color:orange">USED FURNITURE</a>, or <a style="color:orange">USED ELECTRONICES</a></h4>
-    <br />
-    <a class="btn btn-outline-primary btn-lg" href="/Identity/Account/Register">Register</a>
-    <a class="btn btn-outline-success btn-lg" href="/Identity/Account/Login">Login</a>
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h1 class="display-4">Trade & Sell</h1>
+        <br />
+        <h3><strong>Trade and Sell Your Items!</strong></h3>
+        <h4>Welcome to our trade and sell web application!</h4>
+        <h4>By using this app, you can trade or sell your items locally!</h4>
+        <h4>We are mainly focus on the items of <a style="color:orange">USED BOOKS</a>, <a style="color:orange">USED FURNITURE</a>, or <a style="color:orange">USED ELECTRONICES</a></h4>
+        <br />
+        <a class="btn btn-outline-primary btn-lg" href="/Identity/Account/Register">Register</a>
+        <a class="btn btn-outline-success btn-lg" href="/Identity/Account/Login">Login</a>
+        @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+    }
+    else
+    {
+        <h1 class="display-4">Trade & Sell New Arrivals</h1>
+        <br />
+        <div class="card-deck">
+            @foreach (var item in Model)
+            {
+            <div class="card">
+                <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                    @if (item.ImagePath != null)
+                    {
+                        <img src="~/images/@item.ImagePath" class="card-img" alt="Item Image" style="max-height:300px; object-fit:contain">
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image-avaiable.jpg" class="card-img" alt="No Image" style="max-height:300px; object-fit:contain">
+                    }
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                    <p class="card-text text-success">
+                        CA$ @Html.DisplayFor(modelItem => item.Price) 
+                        @if (item.AllowTrade == "true")
+                        {
+                            <span>Allow Trade</span>
+                        }
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate) </small>
+                </div>
+            </div>
+            }
+        </div>
+    }
 </div>

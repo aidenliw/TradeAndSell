@@ -6,3 +6,50 @@
 }
 
 <h4>@ViewData["Title"]</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Data Type
+            </th>
+            <th>
+                Count
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Registration
+            </td>
+            <td>
+                @Model.RegistrationCount
+            </td>
+        </tr>
+        <tr>
+            <td>
+                New Posts
+            </td>
+            <td>
+                @Model.NewPostsCount
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Trade Requests
+            </td>
+            <td>
+                @Model.TradeRequestsCount
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Succeed Transactions
+            </td>
+            <td>
+                @Model.SucceedTransactionsCount
+            </td>
+        </tr>
+    </tbody>
+</table>
