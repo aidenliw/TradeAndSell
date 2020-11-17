@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="col-12">
-                    <h2>Message to @Html.DisplayFor(model => TradeDetails.SellerName)</h2>
+                    <h2>Message to <a asp-controller="Account" asp-action="Details" asp-route-id="@TradeDetails.SellerId">@Html.DisplayFor(modelItem => TradeDetails.SellerName)</a></h2>
                     <h4 style="color:dodgerblue">@Html.DisplayFor(model => TradeDetails.Message)</h4>
                 </div>
                 <div class="col-12">

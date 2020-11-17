@@ -39,7 +39,7 @@
 
 
                 <div class="col-12">
-                    <h2>Offer from @Html.DisplayFor(model => TradeDetails.BuyerName)</h2>
+                    <h2>Offer from <a asp-controller="Account" asp-action="Details" asp-route-id="@TradeDetails.BuyerId">@Html.DisplayFor(modelItem => TradeDetails.BuyerName)</a></h2>
                     @foreach (var item in TradeItems)
                     {
                         <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="col-12">
-                    <h2>Message from @Html.DisplayFor(model => TradeDetails.BuyerName)</h2>
+                    <h2>Message from <a asp-controller="Account" asp-action="Details" asp-route-id="@TradeDetails.BuyerId">@Html.DisplayFor(modelItem => TradeDetails.BuyerName)</a></h2>
                     <h4 style="color:dodgerblue">@Html.DisplayFor(model => TradeDetails.Message)</h4>
                 </div>
                 <div class="col-12">
