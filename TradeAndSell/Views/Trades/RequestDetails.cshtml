@@ -34,8 +34,7 @@
                 <div class="col-7">
                     <h4>@Html.DisplayFor(model => TargetItem.Title)</h4>
                     <h4>Trade Range: CA$ @Html.DisplayFor(model => TargetItem.MinTradePrice) ~ CA$ @Html.DisplayFor(model => TargetItem.MaxTradePrice)</h4>
-                    @* TODO: Add link to the user *@
-                    <h4>Seller: @Html.DisplayFor(model => TradeDetails.SellerName)</h4>
+                    <h4>Seller: <a asp-controller="Account" asp-action="Details" asp-route-id="@TradeDetails.SellerId">@Html.DisplayFor(modelItem => TradeDetails.SellerName)</a></h4>
                 </div>
 
 

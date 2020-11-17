@@ -27,8 +27,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        @* TODO: Link to user details *@
-                        <h5 class="card-title"><span class="text-success">Request</span> to @Html.DisplayFor(modelItem => item.SellerName)</h5>
+                        <h5 class="card-title"><span class="text-success">Request</span> to <a asp-controller="Account" asp-action="Details" asp-route-id="@item.SellerId">@Html.DisplayFor(modelItem => item.SellerName)</a></h5>
                         <a asp-controller="Items" asp-action="Details" asp-route-id="@item.ItemId">
                             <h5 class="card-title">Request Item: @Html.DisplayFor(modelItem => item.ItemName)</h5>
                         </a>
@@ -69,8 +68,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        @* TODO: Link to user details *@
-                        <h5 class="card-title"><span class="text-success">Offer</span> from @Html.DisplayFor(modelItem => item.BuyerName)</h5>
+                        <h5 class="card-title"><span class="text-success">Offer</span> from <a asp-controller="Account" asp-action="Details" asp-route-id="@item.BuyerId">@Html.DisplayFor(modelItem => item.BuyerName)</a></h5>
                         <a asp-controller="Items" asp-action="Details" asp-route-id="@item.ItemId">
                             <h5 class="card-title">Your Item: @Html.DisplayFor(modelItem => item.ItemName)</h5>
                         </a>
