@@ -323,7 +323,7 @@ namespace TradeAndSell.Controllers
 
                 _context.Add(newItem);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
             }
             return RedirectToPage("/Account/Manage/MyPosts", new { area = "Identity" });
         }
