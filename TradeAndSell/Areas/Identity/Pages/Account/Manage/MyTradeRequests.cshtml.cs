@@ -58,7 +58,7 @@ namespace TradeAndSell.Areas.Identity.Pages.Account.Manage
                 MyRequest = user.Id == trade.BuyerId ? true : false
             });
 
-            TradeDetails = tradeDetails.ToList();
+            TradeDetails = tradeDetails.OrderByDescending(td => td.Date).ToList();
 
             return Page();
         }
